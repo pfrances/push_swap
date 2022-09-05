@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 16:57:37 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 00:21:50 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/06 01:29:44 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,25 @@ size_t	find_index_limit(t_stack *stack)
 	return (index_max - ((index_max - index_min) / 2));
 }
 
+void	fixe_sorted_node(t_stack *a, t_stack *b, size_t index_limit)
+{
+	size_t	count;
+	size_t	nodes_to_push;
+
+	keep_half(a, b);
+	count = 0;
+	nodes_to_push = (index_limit - a->tail->index) - 1;
+	while (a->head->index > 0 && count < nodes_to_push)
+	{
+		if (a->head->index == a->tail->index + 1)
+			rotate(a);
+		else
+			push(a, b);
+		count++;
+	}
+	keep_half(a, b);
+}
+
 void	keep_half(t_stack *a, t_stack *b)
 {
 	size_t	nodes_to_push;
@@ -39,15 +58,7 @@ void	keep_half(t_stack *a, t_stack *b)
 	size_t	count;
 
 	if (b->total_nodes <= 5)
-	{
-		up_to_five_nodes(b, a);
-		while (b->total_nodes > 0)
-		{
-			push(b, a);
-			rotate(a);
-		}
-		return ;
-	}
+		return (sort_five_and_push(b, a));
 	nodes_to_push = (b->total_nodes / 2) - (b->total_nodes % 2 == 0);
 	index_limit = find_index_limit(b);
 	count = 0;
@@ -64,18 +75,25 @@ void	keep_half(t_stack *a, t_stack *b)
 		else
 			rotate(b);
 	}
+	fixe_sorted_node(a, b, index_limit);
+}
+
+void	second_step(t_stack *a, t_stack *b)
+{
 	keep_half(a, b);
-	count = 0;
-	nodes_to_push = (index_limit - a->tail->index) - 1;
-	while (a->head->index > 0 && count < nodes_to_push)
+	while (a->head->index != 0)
 	{
 		if (a->head->index == a->tail->index + 1)
 			rotate(a);
 		else
 			push(a, b);
-		count++;
 	}
-	keep_half(a, b);
+	up_to_five_nodes(b, a);
+	while (b->head != NULL)
+	{
+		push(b, a);
+		rotate(a);
+	}
 }
 
 void	resolver(t_stack *a, t_stack *b)
@@ -98,19 +116,6 @@ void	resolver(t_stack *a, t_stack *b)
 			else
 				rotate(a);
 		}
-		keep_half(a, b);
-		while (a->head->index != 0)
-		{
-			if (a->head->index == a->tail->index + 1)
-				rotate(a);
-			else
-				push(a, b);
-		}
-		up_to_five_nodes(b, a);
-		while (b->head != NULL)
-		{
-			push(b, a);
-			rotate(a);
-		}
+		second_step(a, b);
 	}
 }

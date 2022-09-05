@@ -6,22 +6,19 @@
 #    By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 22:35:44 by pfrances          #+#    #+#              #
-#    Updated: 2022/09/05 17:00:09 by pfrances         ###   ########.fr        #
+#    Updated: 2022/09/06 00:46:40 by pfrances         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-SRCS =	push_swap.c					\
-		stacks.c					\
-		swap.c						\
-		push.c						\
-		rotate.c					\
-		reverse_rotate.c			\
-		resolver.c					\
-		ft_atoi_with_error_check.c	\
-		initialisation.c			\
+SRCS =	atoi_error_check.c	\
+		commands.c			\
+		init.c 				\
+		push_swap.c			\
+		resolver.c			\
+		stacks.c			\
 		up_to_five_nodes.c
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a

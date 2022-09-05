@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 22:22:12 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 00:06:54 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/06 01:15:14 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,25 @@ void	four_args_resolver(t_stack *src, t_stack *dst)
 	}
 }
 
+void	five_args_resolver_end(t_stack *src, t_stack *dst)
+{
+	if (dst->head->nb > src->head->next->next->nb)
+	{
+		reverse_rotate(src);
+		push(dst, src);
+		rotate(src);
+		rotate(src);
+	}
+	else
+	{
+		rotate(src);
+		rotate(src);
+		push(dst, src);
+		reverse_rotate(src);
+		reverse_rotate(src);
+	}
+}
+
 void	five_args_resolver(t_stack *src, t_stack *dst)
 {
 	push(src, dst);
@@ -80,21 +99,8 @@ void	five_args_resolver(t_stack *src, t_stack *dst)
 		push(dst, src);
 		swap(src);
 	}
-	else if (dst->head->nb > src->head->next->next->nb)
-	{
-		reverse_rotate(src);
-		push(dst, src);
-		rotate(src);
-		rotate(src);
-	}
 	else
-	{
-		rotate(src);
-		rotate(src);
-		push(dst, src);
-		reverse_rotate(src);
-		reverse_rotate(src);
-	}
+		five_args_resolver_end(src, dst);
 }
 
 void	up_to_five_nodes(t_stack *src, t_stack *dst)

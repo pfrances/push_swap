@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 15:20:46 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 01:23:08 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/07 02:37:51 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 # define PUSH_SWAP_H
 # define STACK_A 0
 # define STACK_B 1
+# define UPPER 0
+# define LOWER 1
 # include "libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
 
 typedef enum e_bool
 {
@@ -62,9 +65,16 @@ void	push(t_stack *stack_src, t_stack *stack_dst);
 void	rotate(t_stack *stack);
 void	reverse_rotate(t_stack *stack);
 void	sort_five_and_push(t_stack *src, t_stack *dst);
+void	do_rotation(t_stack *stack, size_t index_limit, int FLAG);
 
 /*			resolver.c				*/
 void	resolver(t_stack *a, t_stack *b);
 void	keep_half(t_stack *a, t_stack *b);
+size_t	find_index_limit(t_stack *stack);
+
+/*			nodes_fixing.c			*/
+void	fixe_sorted_node(t_stack *a, t_stack *b, size_t index_limit);
+t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, size_t index_to_find);
+t_bool	fixe_firsts_nodes(t_stack *a, t_stack *b, t_bool *zero_found, size_t index_limit);
 
 #endif

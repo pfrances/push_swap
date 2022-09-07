@@ -6,13 +6,12 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:44:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 01:30:21 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/06 17:59:11 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-#include <stdio.h>
 void	print_lists(t_stack *a, t_stack *b)
 {
 	t_node	*trv;
@@ -40,10 +39,13 @@ int	main(int __attribute__((unused))argc, char *argv[])
 	t_stack	b;
 
 	if (!stack_init(&a, &b, argv))
-		ft_putendl_fd("ERROR\n", STDERR_FILENO);
+		ft_putendl_fd("Error\n", STDERR_FILENO);
 	else if (a.total_nodes)
+	{
 		resolver(&a, &b);
-	print_lists(&a, &b);
+		//print_lists(&a, &b);
+		stack_clear(&a);
+		stack_clear(&b);
+	}
 	return (0);
 }
-// ERROR : ./push_swap -697 -681 -606 -86 312 -130 772 81 -385 175 -70 301

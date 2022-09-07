@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 14:43:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 01:22:52 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/07 03:08:18 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,35 @@ void	sort_five_and_push(t_stack *src, t_stack *dst)
 		push(src, dst);
 		rotate(dst);
 	}
+}
+
+void	do_rotation(t_stack *stack, size_t index_limit, int FLAG)
+{
+	t_node	*trv;
+	size_t	count1;
+	size_t	count2;
+
+	trv = stack->head;
+	count1 = 0;
+	while (trv != NULL
+		&& (FLAG == UPPER && trv->index <= index_limit)
+		|| (FLAG == LOWER && trv->index >= index_limit))
+	{
+		trv = trv->next;
+		count1++;
+	}
+	trv = stack->head;
+	count2 = 1;
+	while (trv != NULL)
+	{
+		count2++;
+		if ((FLAG == UPPER && trv->index > index_limit)
+			|| (FLAG == LOWER && trv->index < index_limit))
+			count2 = 1;
+		trv = trv->next;
+	}
+	if (count1 < count2)
+		rotate(stack);
+	else
+		reverse_rotate(stack);
 }

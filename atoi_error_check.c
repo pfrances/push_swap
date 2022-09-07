@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 15:31:06 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 00:42:03 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/06 12:06:52 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,17 @@ int	ft_atoi_with_error_check(const char *nptr, t_bool *error_flag)
 	sign = 1;
 	str_nbr = check_sign(str_nbr, &sign);
 	result = 0;
+	if (!ft_isdigit(*str_nbr))
+		return (0);
 	while (*str_nbr != '\0' && ft_isdigit(*str_nbr))
 	{
 		result = result * 10 + (*str_nbr - '0');
 		str_nbr++;
 		if ((sign == 1 && result > INT_MAX)
 			|| (sign == -1 && result * sign < INT_MIN))
-		{
-			*error_flag = TRUE;
 			return (0);
-		}
 	}
-	if (*str_nbr != '\0')
-		*error_flag = TRUE;
+	if (*str_nbr == '\0')
+		*error_flag = FALSE;
 	return ((int)(result * sign));
 }

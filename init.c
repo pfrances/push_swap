@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:49:31 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 00:41:09 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/06 12:18:15 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ t_bool	check_input(t_stack *a, char **args)
 	t_bool	error_flag;
 	int		nb;
 
-	error_flag = FALSE;
 	i = 1;
 	while (args[i] != NULL)
 	{
+		error_flag = TRUE;
 		nb = ft_atoi_with_error_check(args[i], &error_flag);
 		if (error_flag == TRUE || is_valid_parameter(a, nb) == FALSE)
 			return (FALSE);

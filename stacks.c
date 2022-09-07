@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 17:43:44 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 00:08:12 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/06 12:19:36 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_node	*new_node(int nb)
 {
 	t_node	*node;
 
-	node = malloc(sizeof(t_node *));
+	node = malloc(sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->nb = nb;
@@ -83,11 +83,10 @@ void	stack_clear(t_stack *stack)
 	if (stack == NULL)
 		return ;
 	trv = stack->head;
-	while (trv != stack->tail)
+	while (trv != NULL)
 	{
 		tmp = trv->next;
 		free(trv);
 		trv = tmp;
 	}
-	free(stack);
 }

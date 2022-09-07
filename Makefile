@@ -6,16 +6,17 @@
 #    By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 22:35:44 by pfrances          #+#    #+#              #
-#    Updated: 2022/09/06 00:46:40 by pfrances         ###   ########.fr        #
+#    Updated: 2022/09/06 19:28:59 by pfrances         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -Werror
 SRCS =	atoi_error_check.c	\
 		commands.c			\
 		init.c 				\
+		nodes_fixing.c		\
 		push_swap.c			\
 		resolver.c			\
 		stacks.c			\

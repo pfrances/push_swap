@@ -6,13 +6,13 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 14:43:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/07 03:08:18 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/07 22:53:10 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	push(t_stack *stack_src, t_stack *stack_dst)
+void	push(t_stack *stack_src, t_stack *stack_dst, t_output *output)
 {
 	t_node	*tmp;
 
@@ -27,12 +27,12 @@ void	push(t_stack *stack_src, t_stack *stack_dst)
 	stack_src->total_nodes -= 1;
 	stack_dst->total_nodes += 1;
 	if (stack_dst->name == STACK_A)
-		ft_putendl_fd("pa", STDOUT_FILENO);
+		print_to_buff("pa\n", output);
 	else if (stack_dst->name == STACK_B)
-		ft_putendl_fd("pb", STDOUT_FILENO);
+		print_to_buff("pb\n", output);
 }
 
-void	swap(t_stack *stack)
+void	swap(t_stack *stack, t_output *output)
 {
 	t_node	*tmp;
 
@@ -44,12 +44,12 @@ void	swap(t_stack *stack)
 	stack->head->next = tmp;
 	update_tail(stack);
 	if (stack->name == STACK_A)
-		ft_putendl_fd("sa", STDOUT_FILENO);
+		print_to_buff("sa\n", output);
 	else if (stack->name == STACK_B)
-		ft_putendl_fd("sb", STDOUT_FILENO);
+		print_to_buff("sb\n", output);
 }
 
-void	rotate(t_stack *stack)
+void	rotate(t_stack *stack, t_output *output)
 {
 	t_node	*tmp;
 
@@ -61,12 +61,12 @@ void	rotate(t_stack *stack)
 	stack->head = tmp;
 	update_tail(stack);
 	if (stack->name == STACK_A)
-		ft_putendl_fd("ra", STDOUT_FILENO);
+		print_to_buff("ra\n", output);
 	else if (stack->name == STACK_B)
-		ft_putendl_fd("rb", STDOUT_FILENO);
+		print_to_buff("rb\n", output);
 }
 
-void	reverse_rotate(t_stack *stack)
+void	reverse_rotate(t_stack *stack, t_output *output)
 {
 	t_node	*tmp;
 
@@ -78,22 +78,22 @@ void	reverse_rotate(t_stack *stack)
 	stack->head->next = tmp;
 	update_tail(stack);
 	if (stack->name == STACK_A)
-		ft_putendl_fd("rra", STDOUT_FILENO);
+		print_to_buff("rra\n", output);
 	else if (stack->name == STACK_B)
-		ft_putendl_fd("rrb", STDOUT_FILENO);
+		print_to_buff("rrb\n", output);
 }
 
-void	sort_five_and_push(t_stack *src, t_stack *dst)
+void	sort_five_and_push(t_stack *src, t_stack *dst, t_output *output)
 {
-	up_to_five_nodes(src, dst);
+	up_to_five_nodes(src, dst, output);
 	while (src->total_nodes > 0)
 	{
-		push(src, dst);
-		rotate(dst);
+		push(src, dst, output);
+		rotate(dst, output);
 	}
 }
 
-void	do_rotation(t_stack *stack, size_t index_limit, int FLAG)
+void	do_rotation(t_stack *stack, t_limite limite, t_output *output)
 {
 	t_node	*trv;
 	size_t	count1;
@@ -102,8 +102,8 @@ void	do_rotation(t_stack *stack, size_t index_limit, int FLAG)
 	trv = stack->head;
 	count1 = 0;
 	while (trv != NULL
-		&& (FLAG == UPPER && trv->index <= index_limit)
-		|| (FLAG == LOWER && trv->index >= index_limit))
+		&& ((limite.direction == UP && trv->index <= limite.value)
+		|| (limite.direction == DOWN && trv->index >= limite.value)))
 	{
 		trv = trv->next;
 		count1++;
@@ -113,13 +113,13 @@ void	do_rotation(t_stack *stack, size_t index_limit, int FLAG)
 	while (trv != NULL)
 	{
 		count2++;
-		if ((FLAG == UPPER && trv->index > index_limit)
-			|| (FLAG == LOWER && trv->index < index_limit))
+		if ((limite.direction == UP && trv->index > limite.value)
+			|| (limite.direction == DOWN && trv->index < limite.value))
 			count2 = 1;
 		trv = trv->next;
 	}
 	if (count1 < count2)
-		rotate(stack);
+		rotate(stack, output);
 	else
-		reverse_rotate(stack);
+		reverse_rotate(stack, output);
 }

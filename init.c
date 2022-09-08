@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:49:31 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 12:18:15 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:07:16 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,26 @@ t_bool	stack_init(t_stack *a, t_stack *b, char **args)
 		stack_clear(a);
 		return (FALSE);
 	}
+	return (TRUE);
+}
+
+t_bool	output_init(t_output *output)
+{
+	output->index = 0;
+	output->buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (output->buff == NULL)
+		return (FALSE);
+	output->for_cleaning = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (output->for_cleaning == NULL)
+		return (FALSE);
+	output->to_delete = ft_split(TO_DELETE, ' ');
+	if (output->to_delete == NULL)
+		return (FALSE);
+	output->to_replace = ft_split(TO_REPLACE, ' ');
+	if (output->to_replace == NULL)
+		return (FALSE);
+	output->replace_by = ft_split(REPLACE_BY, ' ');
+	if (output->replace_by == NULL)
+		return (FALSE);
 	return (TRUE);
 }

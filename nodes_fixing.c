@@ -6,88 +6,100 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 13:22:34 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/07 03:04:05 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/08 13:22:51 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	fixe_sorted_node(t_stack *a, t_stack *b, size_t index_limit)
+void	fixe_sorted_node(t_stack *a, t_stack *b, t_limite limite, t_output *output)
 {
 	size_t	count;
 	size_t	nodes_to_push;
 
-	keep_half(a, b);
+	keep_half(a, b, output);
 	count = 0;
-	nodes_to_push = (index_limit - a->tail->index) - 1;
+	nodes_to_push = (limite.value - a->tail->index) - 1;
 	while (a->head->index > 0 && count < nodes_to_push)
 	{
 		if (a->head->index == a->tail->index + 1)
-			rotate(a);
+			rotate(a, output);
 		else
-			push(a, b);
+			push(a, b, output);
 		count++;
 	}
-	keep_half(a, b);
+	keep_half(a, b, output);
 }
 
-t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, size_t index_to_find)
+int	found_closest_nodes(t_stack *src, size_t index_to_find)
 {
+	int		moves_from_head;
+	int		moves_from_tail;
 	t_node	*trv;
-	ssize_t	count1;
-	ssize_t	count2;
 
-	if (src->head == NULL)
-		return (FALSE);
 	trv = src->head;
-	count1 = 0;
+	moves_from_head = 0;
 	while (trv != NULL && trv->index != index_to_find)
 	{
-		count1++;
+		moves_from_head++;
 		trv = trv->next;
 	}
 	if (trv == NULL)
-		count1 = INT_MAX;
+		moves_from_head = INT_MAX;
 	trv = src->head;
-	count2 = 1;
+	moves_from_tail = 1;
 	while (trv != NULL)
 	{
-		count2++;
+		moves_from_tail++;
 		if (trv->index == index_to_find)
-			count2 = 1;
+			moves_from_tail = 1;
 		trv = trv->next;
 	}
-	if (count2 == src->total_nodes)
-		count2 = INT_MAX;
-	if (count1 < 5 || count2 < 5)
+	if (moves_from_tail == (int)src->total_nodes)
+		moves_from_tail = INT_MAX;
+	if (moves_from_head < moves_from_tail)
+		return (moves_from_head);
+	return (-moves_from_tail);
+}
+
+t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, size_t index_to_find, t_limite limite, t_output *output)
+{
+	int	nbr_of_moves;
+
+	nbr_of_moves = found_closest_nodes(src, index_to_find);
+	if (nbr_of_moves != -INT_MAX && nbr_of_moves != INT_MAX)
 	{
-		if (count1 < count2)
-			while (count1--)
-				rotate(src);
+		if (nbr_of_moves >= 0)
+			while (nbr_of_moves--
+				&& ((limite.direction == UP && src->head->index <= limite.value)
+				|| (limite.direction == DOWN && src->head->index >= limite.value)))
+				rotate(src, output);
 		else
-			while (count2--)
-				reverse_rotate(src);
+			while (nbr_of_moves++
+				&& ((limite.direction == UP && src->head->index <= limite.value)
+				|| (limite.direction == DOWN && src->head->index >= limite.value)))
+				reverse_rotate(src, output);
 		if (src->head->index == index_to_find)
 		{
-			push(src, dst);
-			rotate(dst);
+			push(src, dst, output);
+			rotate(dst, output);
 			return (TRUE);
 		}
 	}
 	return (FALSE);
 }
 
-t_bool	fixe_firsts_nodes(t_stack *a, t_stack *b, t_bool *zero_found, size_t index_limit)
+t_bool	fixe_firsts_nodes(t_stack *a, t_stack *b, t_limite limite, t_output *output)
 {
-	if (*zero_found == FALSE)
+	if (limite.zero_is_found == FALSE)
 	{
-		if (find_nodes_easy_to_fixe(a, b, 0) == TRUE)
+		if (find_nodes_easy_to_fixe(a, b, 0, limite, output) == TRUE)
 		{
-			*zero_found = TRUE;
+			limite.zero_is_found = TRUE;
 			return (TRUE);
 		}
 	}
-	else if (b->tail->index < index_limit)
-		return (find_nodes_easy_to_fixe(a, b, b->tail->index + 1));
+	else if (b->tail->index < limite.value)
+		return (find_nodes_easy_to_fixe(a, b, b->tail->index + 1, limite, output));
 	return (FALSE);
 }

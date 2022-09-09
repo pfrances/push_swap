@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:49:31 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/08 15:07:16 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/09 00:20:23 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,41 +62,52 @@ t_bool	check_input(t_stack *a, char **args)
 	return (TRUE);
 }
 
-t_bool	stack_init(t_stack *a, t_stack *b, char **args)
+t_bool	stack_init(t_tools *tools, char **args)
 {
-	a->name = STACK_A;
-	b->name = STACK_B;
-	a->head = NULL;
-	b->head = NULL;
-	a->tail = NULL;
-	b->tail = NULL;
-	a->total_nodes = 0;
-	b->total_nodes = 0;
-	if (!check_input(a, args))
+	tools->a = malloc(sizeof(t_stack));
+	if (tools->a == NULL)
+		return (FALSE);
+	tools->b = malloc(sizeof(t_stack));
+	if (tools->b == NULL)
+		return (FALSE);
+	tools->a->name = STACK_A;
+	tools->b->name = STACK_B;
+	tools->a->head = NULL;
+	tools->b->head = NULL;
+	tools->a->tail = NULL;
+	tools->b->tail = NULL;
+	tools->a->total_nodes = 0;
+	tools->b->total_nodes = 0;
+	if (!check_input(tools->a, args))
 	{
-		stack_clear(a);
+		stack_clear(tools);
 		return (FALSE);
 	}
+	tools->total_nodes = tools->a->total_nodes;
+	tools->next_to_fix = 0;
 	return (TRUE);
 }
 
-t_bool	output_init(t_output *output)
+t_bool	output_init(t_tools *tools)
 {
-	output->index = 0;
-	output->buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (output->buff == NULL)
+	tools->output = malloc(sizeof(t_output));
+	if (tools->output == NULL)
 		return (FALSE);
-	output->for_cleaning = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (output->for_cleaning == NULL)
+	tools->output->index = 0;
+	tools->output->buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (tools->output->buff == NULL)
 		return (FALSE);
-	output->to_delete = ft_split(TO_DELETE, ' ');
-	if (output->to_delete == NULL)
+	tools->output->for_cleaning = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (tools->output->for_cleaning == NULL)
 		return (FALSE);
-	output->to_replace = ft_split(TO_REPLACE, ' ');
-	if (output->to_replace == NULL)
+	tools->output->to_delete = ft_split(TO_DELETE, ' ');
+	if (tools->output->to_delete == NULL)
 		return (FALSE);
-	output->replace_by = ft_split(REPLACE_BY, ' ');
-	if (output->replace_by == NULL)
+	tools->output->to_replace = ft_split(TO_REPLACE, ' ');
+	if (tools->output->to_replace == NULL)
+		return (FALSE);
+	tools->output->replace_by = ft_split(REPLACE_BY, ' ');
+	if (tools->output->replace_by == NULL)
 		return (FALSE);
 	return (TRUE);
 }

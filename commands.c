@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 14:43:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/07 22:53:10 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/09 01:05:24 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	sort_five_and_push(t_stack *src, t_stack *dst, t_output *output)
 	}
 }
 
-void	do_rotation(t_stack *stack, t_limite limite, t_output *output)
+void	do_rotation(t_stack *stack, t_tools *tools)
 {
 	t_node	*trv;
 	size_t	count1;
@@ -102,8 +102,8 @@ void	do_rotation(t_stack *stack, t_limite limite, t_output *output)
 	trv = stack->head;
 	count1 = 0;
 	while (trv != NULL
-		&& ((limite.direction == UP && trv->index <= limite.value)
-		|| (limite.direction == DOWN && trv->index >= limite.value)))
+		&& ((tools->limite_direction == UP && trv->index <= tools->limite_value_a)
+		|| (tools->limite_direction == DOWN && trv->index >= tools->limite_value_a)))
 	{
 		trv = trv->next;
 		count1++;
@@ -113,13 +113,13 @@ void	do_rotation(t_stack *stack, t_limite limite, t_output *output)
 	while (trv != NULL)
 	{
 		count2++;
-		if ((limite.direction == UP && trv->index > limite.value)
-			|| (limite.direction == DOWN && trv->index < limite.value))
+		if ((tools->limite_direction == UP && trv->index > tools->limite_value_a)
+			|| (tools->limite_direction == DOWN && trv->index < tools->limite_value_a))
 			count2 = 1;
 		trv = trv->next;
 	}
 	if (count1 < count2)
-		rotate(stack, output);
+		rotate(stack, tools->output);
 	else
-		reverse_rotate(stack, output);
+		reverse_rotate(stack, tools->output);
 }

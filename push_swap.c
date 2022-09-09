@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:44:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/08 13:05:35 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/09 02:03:20 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,40 @@ void	print_lists(t_stack *a, t_stack *b)
 	ft_putstr_fd("\n\n", 1);
 }
 
+void	free_memory(t_tools *tools)
+{
+	size_t	i;
+
+	stack_clear(tools);
+	free(tools->output->buff);
+	free(tools->output->for_cleaning);
+	i = 0;
+	while (tools->output->to_delete[i] != NULL)
+		free(tools->output->to_delete[i++]);
+	free(tools->output->to_delete);
+	i = 0;
+	while (tools->output->to_replace[i] != NULL)
+		free(tools->output->to_replace[i++]);
+	free(tools->output->to_replace);
+	i = 0;
+	while (tools->output->replace_by[i] != NULL)
+		free(tools->output->replace_by[i++]);
+	free(tools->output->replace_by);
+	free(tools->output);
+	free(tools->limites_array);
+}
+
 int	main(int __attribute__((unused))argc, char *argv[])
 {
-	t_stack		a;
-	t_stack		b;
-	t_output	output;
+	t_tools	tools;
 
-	if (!stack_init(&a, &b, argv) || !output_init(&output))
+	if (!stack_init(&tools, argv) || !output_init(&tools) || !set_limites_array(&tools))
 		ft_putendl_fd("Error\n", STDERR_FILENO);
-	else if (a.total_nodes)
+	else if (tools.a->total_nodes)
 	{
-		resolver(&a, &b, &output);
-		//print_lists(&a, &b);
-		stack_clear(&a);
-		stack_clear(&b);
-		print_remaining(&output);
+		resolver(&tools);
+		print_remaining(tools.output);
+		free_memory(&tools);
 	}
 	return (0);
 }

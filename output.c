@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 21:40:55 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/08 15:39:01 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/08 23:36:46 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,20 +105,8 @@ void	adjust_output(t_output *output)
 
 void	print_remaining(t_output *output)
 {
-	size_t	i;
-
-	i = 0;
 	if (*(output->buff) != '\0')
 		adjust_output(output);
-	while (output->to_delete[i] != NULL)
-	{
-		free(output->to_delete[i]);
-		i++;
-	}
-	free(output->to_delete[i]);
-	free(output->to_delete);
-	free(output->buff);
-	free(output->for_cleaning);
 }
 
 void	print_to_buff(char *command, t_output *output)

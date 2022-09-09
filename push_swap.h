@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 15:20:46 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/08 15:35:29 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/09 02:01:54 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,6 @@ typedef struct s_stack
 	struct s_node	*tail;
 }		t_stack;
 
-typedef struct s_limite
-{
-	size_t		value;
-	t_bool		zero_is_found;
-	t_direction	direction;
-}		t_limite;
-
 typedef struct s_output
 {
 	size_t		index;
@@ -67,12 +60,29 @@ typedef struct s_output
 	char		**replace_by;
 }		t_output;
 
+typedef struct s_tools
+{
+	t_output	*output;
+	t_stack		*a;
+	t_stack		*b;
+	size_t		total_nodes;
+	size_t		next_to_fix;
+	size_t		*limites_array;
+	size_t		limite_value_a;
+	size_t		limite_value_b;
+	t_direction	limite_direction;
+}		t_tools;
+
+
 /*			push_swap.c				*/
 void	print_lists(t_stack *a, t_stack *b);
 
 /*			init.c					*/
-t_bool	stack_init(t_stack *a, t_stack *b, char **args);
-t_bool	output_init(t_output *output);
+t_bool	stack_init(t_tools *tools, char **args);
+t_bool	output_init(t_tools *tools);
+
+/*			limite.c				*/
+t_bool	set_limites_array(t_tools *tools);
 
 /*			atoi_error_check.c		*/
 int		ft_atoi_with_error_check(const char *nptr, t_bool *error_flag);
@@ -81,7 +91,7 @@ int		ft_atoi_with_error_check(const char *nptr, t_bool *error_flag);
 t_node	*new_node(int nb);
 t_bool	add_node_tail(t_stack *stack, t_node *new);
 t_bool	is_full_sorted(t_stack *stack);
-void	stack_clear(t_stack *stack);
+void	stack_clear(t_tools *tools);
 void	update_tail(t_stack *stack);
 
 /*			commands.c				*/
@@ -90,20 +100,20 @@ void	push(t_stack *stack_src, t_stack *stack_dst, t_output *output);
 void	rotate(t_stack *stack, t_output *output);
 void	reverse_rotate(t_stack *stack, t_output *output);
 void	sort_five_and_push(t_stack *src, t_stack *dst, t_output *output);
-void	do_rotation(t_stack *stack, t_limite limite, t_output *output);
+void	do_rotation(t_stack *stack, t_tools *tools);
 
 /*			resolver.c				*/
-void	resolver(t_stack *a, t_stack *b, t_output *output);
-void	keep_half(t_stack *a, t_stack *b, t_output *output);
-size_t	find_index_limit(t_stack *stack);
+void	resolver(t_tools *tools);
+void	keep_half(t_tools *tools);
+size_t	find_index_limit(t_stack *stack, t_tools *tools);
 
 /*			up_to_five_nodes.c		*/
 void	up_to_five_nodes(t_stack *src, t_stack *dst, t_output *output);
 
 /*			nodes_fixing.c			*/
-void	fixe_sorted_node(t_stack *a, t_stack *b, t_limite limite, t_output *output);
-t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, size_t index_to_find, t_limite limite, t_output *output);
-t_bool	fixe_firsts_nodes(t_stack *a, t_stack *b, t_limite limite, t_output *output);
+void	fixe_sorted_node(t_tools *tools);
+t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, t_tools *tools);
+t_bool	fixe_firsts_nodes(t_tools *tools);
 
 /*			output.c				*/
 void	print_to_buff(char *command, t_output *output);

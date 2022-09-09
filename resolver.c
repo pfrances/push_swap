@@ -6,13 +6,13 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 16:57:37 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/08 15:52:32 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/09 03:09:48 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-size_t	find_index_limit(t_stack *stack)
+size_t	find_index_limit(t_stack *stack, t_tools *tools)
 {
 	size_t	index_min;
 	size_t	index_max;
@@ -23,6 +23,8 @@ size_t	find_index_limit(t_stack *stack)
 	index_max = 0;
 	while (trv != NULL)
 	{
+		if (tools->next_to_fix != 0 && trv->index == 0 && stack->name == STACK_A)
+			break ;
 		if (trv->index < index_min)
 			index_min = trv->index;
 		if (trv->index > index_max)
@@ -32,80 +34,113 @@ size_t	find_index_limit(t_stack *stack)
 	return (index_max - ((index_max - index_min) / 2));
 }
 
-void	keep_half(t_stack *a, t_stack *b, t_output *output)
+// size_t	find_index_limit(t_stack *stack, t_tools *tools)
+// {
+// 	size_t	i;
+// 	size_t	count;
+// 	t_node	*trv;
+
+// 	i = 0;
+// 	trv = stack->head;
+// 	while (tools->limites_array[i] != 0 && tools->next_to_fix == 0 || trv->index != 0)
+// 	{
+// 		if (trv->index < tools->limites_array[i])
+// 		{
+// 			break ;
+// 			trv = stack->head;
+// 		}
+// 		trv = trv->next;
+// 		if (trv == NULL)
+// 		{
+// 			trv = stack->head;
+// 			i++;
+// 		}
+// 	}
+// 	if (tools->limites_array[i] != 0)
+// 		return (tools->limites_array[i]);
+// 	i = 0;
+// 	trv = stack->head;
+// 	while (tools->limites_array[i] != 0 && tools->next_to_fix == 0 || trv->index != 0)
+// 	{
+// 		if ((trv->index <= tools->total_nodes - tools->limites_array[i]))
+// 		{
+// 			break ;
+// 			trv = stack->head;
+// 		}
+// 		trv = trv->next;
+// 		if (trv == NULL)
+// 		{
+// 			trv = stack->head;
+// 			i++;
+// 		}
+// 	}
+// 	return (tools->limites_array[i]);
+// }
+
+void	keep_half(t_tools *tools)
 {
 	size_t		nodes_to_push;
 	size_t		count;
-	t_limite	limite;
 
-	if (b->total_nodes <= 5)
-		return (sort_five_and_push(b, a, output));
-	nodes_to_push = (b->total_nodes / 2) - (b->total_nodes % 2 == 0);
-	limite.value = find_index_limit(b);
-	limite.direction = UP;
-	limite.zero_is_found = TRUE;
-	count = 0;
-	while (b->head != NULL && count < nodes_to_push)
+	if (tools->b->total_nodes <= 5)
 	{
-		find_nodes_easy_to_fixe(b, a, a->tail->index + 1, limite, output);
-		if (b->head != NULL && b->head->index > limite.value)
+		sort_five_and_push(tools->b, tools->a, tools->output);
+		return (fixe_sorted_node(tools));
+	}
+	nodes_to_push = (tools->b->total_nodes / 2) + (tools->b->total_nodes % 2 == 1);
+	tools->limite_direction = UP;
+	tools->limite_value_a = find_index_limit(tools->b, tools);
+	count = 0;
+	while (tools->b->head != NULL && count < nodes_to_push)
+	{
+		find_nodes_easy_to_fixe(tools->b, tools->a, tools);
+		if (tools->b->head != NULL && tools->b->head->index > tools->limite_value_a)
 		{
-			push(b, a, output);
+			push(tools->b, tools->a, tools->output);
 			count++;
 		}
 		else
-			do_rotation(b, limite, output);
+			do_rotation(tools->b, tools);
 	}
-	fixe_sorted_node(a, b, limite, output);
+	keep_half(tools);
 }
 
-void	second_step(t_stack *a, t_stack *b, t_limite limite, t_output *output)
+void	second_step(t_tools *tools)
 {
-	reverse_rotate(b, output);
-	push(b, a, output);
-	while (b->tail->index == a->head->index - 1)
+	reverse_rotate(tools->b, tools->output);
+	push(tools->b, tools->a, tools->output);
+	while (tools->b->tail->index == tools->a->head->index - 1)
 	{
-		reverse_rotate(b, output);
-		push(b, a, output);
+		reverse_rotate(tools->b, tools->output);
+		push(tools->b, tools->a, tools->output);
 	}
-	while (a->head->index < limite.value)
-		rotate(a, output);
-	keep_half(a, b, output);
-	while (a->head->index != 0)
-	{
-		if (a->head->next->index == a->tail->index + 1)
-			swap(a, output);
-		if (a->head->index == a->tail->index + 1)
-			rotate(a, output);
-		else
-			push(a, b, output);
-	}
-	sort_five_and_push(b, a, output);
+	while (tools->a->head->index < tools->limite_value_a)
+		rotate(tools->a, tools->output);
+	keep_half(tools);
 }
 
-void	resolver(t_stack *a, t_stack *b, t_output *output)
+void	resolver(t_tools *tools)
 {
 	size_t		nodes_to_push;
-	t_limite	limite;
 
-	if (is_full_sorted(a))
+	if (is_full_sorted(tools->a))
 		return ;
-	if (a->total_nodes <= 5)
-		up_to_five_nodes(a, b, output);
+	if (tools->total_nodes <= 5)
+		up_to_five_nodes(tools->a, tools->b, tools->output);
 	else
 	{
-		nodes_to_push = (a->total_nodes / 2);
-		limite.value = find_index_limit(a);
-		limite.direction = DOWN;
-		limite.zero_is_found = FALSE;
-		while (b->total_nodes < nodes_to_push)
+		nodes_to_push = (tools->total_nodes / 2);
+		tools->limite_direction = DOWN;
+		tools->limite_value_a = find_index_limit(tools->a, tools);
+		tools->limite_value_b = find_index_limit(tools->a, tools);
+		while (tools->b->total_nodes < nodes_to_push)
 		{
-			fixe_firsts_nodes(a, b, limite, output);
-			if (a->head->index < limite.value)
-				push(a, b, output);
+			find_nodes_easy_to_fixe(tools->a, tools->b, tools);
+			if (tools->a->head->index < tools->limite_value_a)
+				push(tools->a, tools->b, tools->output);
 			else
-				do_rotation(a, limite, output);
+				do_rotation(tools->a, tools);
 		}
-		second_step(a, b, limite, output);
+		second_step(tools);
 	}
 }

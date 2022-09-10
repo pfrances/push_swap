@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 15:20:46 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/10 03:08:48 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/11 00:57:48 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,27 +68,22 @@ typedef struct s_tools
 	size_t		total_nodes;
 	size_t		next_to_fix;
 	char		*nodes_array;
-	size_t		array_size;
 	size_t		limite;
 	t_direction	limite_direction;
 }		t_tools;
 
-/*			push_swap.c				*/
-
 /*			init.c					*/
-t_bool	stack_init(t_tools *tools, char **args);
-t_bool	output_init(t_tools *tools);
+t_bool	initialisation(char **args, t_tools *tools);
+
+/*			input_check.c			*/
+t_bool	input_check(t_stack *a, char **args);
 
 /*			limite.c				*/
-t_bool	set_nodes_array(t_tools *tools);
 void	find_index_limit(t_stack *stack, t_tools *tools, size_t nb_nodes);
 size_t	calculate_nodes_to_push(t_tools *tools);
 t_bool	has_nodes_under_limite(t_stack *stack, t_tools *tools);
 t_bool	has_nodes_over_limite(t_stack *stack, t_tools *tools);
 t_bool	is_node_to_push(t_tools *tools, size_t index);
-
-/*			sort_tab.c				*/
-void	ft_sort_int_tab(size_t *tab, size_t size);
 
 /*			atoi_error_check.c		*/
 int		ft_atoi_with_error_check(const char *nptr, t_bool *error_flag);
@@ -108,6 +103,11 @@ void	reverse_rotate(t_stack *stack, t_output *output);
 void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools);
 void	do_rotation(t_stack *stack, t_tools *tools);
 
+/*			up_to_fives_nodes		*/
+void	three_nodes_resolver(t_stack *stack, t_output *output);
+void	four_nodes_resolver(t_stack *src, t_stack *dst, t_output *output);
+void	five_nodes_resolver(t_stack *src, t_stack *dst, t_output *output);
+
 /*			resolver.c				*/
 void	resolver(t_tools *tools);
 void	keep_half(t_tools *tools);
@@ -116,12 +116,19 @@ void	keep_half(t_tools *tools);
 void	up_to_five_nodes(t_stack *src, t_stack *dst, t_output *output);
 
 /*			nodes_fixing.c			*/
-void	fixe_sorted_node(t_tools *tools);
+void	a_stack_process(t_tools *tools);
 t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, t_tools *tools);
+int	found_closest_nodes(t_stack *src, size_t next_to_fix);
 t_bool	fixe_firsts_nodes(t_tools *tools);
 
-/*			output.c				*/
+/*			output.c	1 & 2		*/
 void	print_to_buff(char *command, t_output *output);
 void	print_remaining(t_output *output);
+void	output_optimisation(t_output *output);
+
+/*			utils.c					*/
+void	push_nodes(t_stack *src, t_stack *dst, size_t index, t_output *output);
+size_t	find_index(t_stack *stack, size_t to_find);
+size_t	ft_abs(int	nb);
 
 #endif

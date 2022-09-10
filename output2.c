@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   output.c                                           :+:      :+:    :+:   */
+/*   output2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/07 21:40:55 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/10 01:36:15 by pfrances         ###   ########.fr       */
+/*   Created: 2022/09/10 22:27:53 by pfrances          #+#    #+#             */
+/*   Updated: 2022/09/10 22:29:01 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	optimise_double_command(t_output *output)
 	has_delete_marks(output);
 }
 
-void	adjust_output(t_output *output)
+void	output_optimisation(t_output *output)
 {
 	char	*ptr;
 	size_t	len;
@@ -91,35 +91,14 @@ void	adjust_output(t_output *output)
 	if (ptr != NULL)
 	{
 		ft_memset(ptr, 'X', len);
-		adjust_output(output);
+		output_optimisation(output);
 	}
 	else if (has_delete_marks(output))
-		adjust_output(output);
+		output_optimisation(output);
 	else
 	{
 		optimise_double_command(output);
 		write(STDOUT_FILENO, output->buff, output->index);
 		output->index = 0;
 	}
-}
-
-void	print_remaining(t_output *output)
-{
-	if (*(output->buff) != '\0')
-		adjust_output(output);
-}
-
-void	print_to_buff(char *command, t_output *output)
-{
-	size_t	len;
-
-	len = ft_strlen(command);
-	if (output->index >= BUFFER_SIZE - len)
-	{
-		adjust_output(output);
-		ft_bzero(output->buff, BUFFER_SIZE + 1);
-		output->index = 0;
-	}
-	ft_strlcpy(&output->buff[output->index], command, len + 1);
-	output->index += len;
 }

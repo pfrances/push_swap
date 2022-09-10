@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 15:31:06 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/06 12:06:52 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/10 22:16:15 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ static char	*check_sign(char *str_nbr, int *sign)
 
 int	ft_atoi_with_error_check(const char *nptr, t_bool *error_flag)
 {
-	long	result;
-	int		sign;
-	char	*str_nbr;
+	long long	result;
+	int			sign;
+	char		*str_nbr;
 
 	str_nbr = (char *)nptr;
 	while (ft_is_space(*str_nbr))
@@ -42,15 +42,12 @@ int	ft_atoi_with_error_check(const char *nptr, t_bool *error_flag)
 	sign = 1;
 	str_nbr = check_sign(str_nbr, &sign);
 	result = 0;
-	if (!ft_isdigit(*str_nbr))
-		return (0);
 	while (*str_nbr != '\0' && ft_isdigit(*str_nbr))
 	{
 		result = result * 10 + (*str_nbr - '0');
-		str_nbr++;
-		if ((sign == 1 && result > INT_MAX)
-			|| (sign == -1 && result * sign < INT_MIN))
+		if (result - (sign == -1) > INT_MAX)
 			return (0);
+		str_nbr++;
 	}
 	if (*str_nbr == '\0')
 		*error_flag = FALSE;

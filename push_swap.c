@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:44:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/10 03:07:20 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/10 22:38:57 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,18 @@ void	free_memory(t_tools *tools)
 	free(tools->nodes_array);
 }
 
+int	print_error_and_quit(void)
+{
+	ft_putendl_fd("Error", STDERR_FILENO);
+	return (1);
+}
+
 int	main(int __attribute__((unused))argc, char *argv[])
 {
 	t_tools	tools;
 
-	if (!stack_init(&tools, argv) || !output_init(&tools)
-		|| !set_nodes_array(&tools))
-		ft_putendl_fd("Error", STDERR_FILENO);
+	if (initialisation(argv, &tools) == FALSE)
+		return (print_error_and_quit());
 	else if (tools.a->total_nodes)
 	{
 		resolver(&tools);

@@ -6,7 +6,7 @@
 #    By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 22:35:44 by pfrances          #+#    #+#              #
-#    Updated: 2022/09/10 03:10:09 by pfrances         ###   ########.fr        #
+#    Updated: 2022/09/11 01:18:34 by pfrances         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,20 @@ CFLAGS = -Wall -Wextra -Werror
 SRCS =	atoi_error_check.c	\
 		commands.c			\
 		init.c 				\
+		input_check.c		\
 		limite.c			\
-		output.c			\
-		nodes_fixing.c		\
+		output1.c			\
+		output2.c			\
+		stack_a_process.c	\
+		nodes_to_push.c		\
 		push_swap.c			\
 		resolver.c			\
 		stacks.c			\
-		up_to_five_nodes.c
+		utils.c				\
+		up_to_five_nodes/three_nodes.c	\
+		up_to_five_nodes/four_nodes.c	\
+		up_to_five_nodes/five_nodes.c	\
+		up_to_five_nodes/up_to_five_nodes.c
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 CHECKER = checker

@@ -6,61 +6,11 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:49:31 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/09 00:20:23 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/11 00:36:51 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	set_index(t_stack *a)
-{
-	t_node	*trv;
-
-	trv = a->head;
-	while (trv != a->tail)
-	{
-		if (trv->nb > a->tail->nb)
-			trv->index++;
-		else
-			a->tail->index++;
-		trv = trv->next;
-	}
-}
-
-t_bool	is_valid_parameter(t_stack *a, int nb)
-{
-	t_node	*trv;
-
-	trv = a->head;
-	while (trv != a->tail)
-	{
-		if (nb == trv->nb)
-			return (FALSE);
-		trv = trv->next;
-	}
-	return (TRUE);
-}
-
-t_bool	check_input(t_stack *a, char **args)
-{
-	size_t	i;
-	t_bool	error_flag;
-	int		nb;
-
-	i = 1;
-	while (args[i] != NULL)
-	{
-		error_flag = TRUE;
-		nb = ft_atoi_with_error_check(args[i], &error_flag);
-		if (error_flag == TRUE || is_valid_parameter(a, nb) == FALSE)
-			return (FALSE);
-		if (add_node_tail(a, new_node(nb)) == FALSE)
-			return (FALSE);
-		set_index(a);
-		i++;
-	}
-	return (TRUE);
-}
 
 t_bool	stack_init(t_tools *tools, char **args)
 {
@@ -78,7 +28,7 @@ t_bool	stack_init(t_tools *tools, char **args)
 	tools->b->tail = NULL;
 	tools->a->total_nodes = 0;
 	tools->b->total_nodes = 0;
-	if (!check_input(tools->a, args))
+	if (!input_check(tools->a, args))
 	{
 		stack_clear(tools);
 		return (FALSE);
@@ -109,5 +59,31 @@ t_bool	output_init(t_tools *tools)
 	tools->output->replace_by = ft_split(REPLACE_BY, ' ');
 	if (tools->output->replace_by == NULL)
 		return (FALSE);
+	return (TRUE);
+}
+
+t_bool	nodes_array_init(t_tools *tools)
+{
+	tools->nodes_array = malloc(sizeof(char) * (tools->total_nodes + 1));
+	if (tools->nodes_array == NULL)
+		return (FALSE);
+	return (TRUE);
+}
+
+t_bool	initialisation(char **args, t_tools *tools)
+{
+	if (stack_init(tools, args) == FALSE)
+		return (FALSE);
+	if (nodes_array_init(tools) == FALSE)
+	{
+		stack_clear(tools);
+		return (FALSE);
+	}
+	if (output_init(tools) == FALSE)
+	{
+		stack_clear(tools);
+		free(tools->nodes_array);
+		return (FALSE);
+	}
 	return (TRUE);
 }

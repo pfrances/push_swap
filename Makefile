@@ -6,13 +6,13 @@
 #    By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 22:35:44 by pfrances          #+#    #+#              #
-#    Updated: 2022/09/09 02:08:04 by pfrances         ###   ########.fr        #
+#    Updated: 2022/09/10 03:10:09 by pfrances         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 CC = gcc
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 SRCS =	atoi_error_check.c	\
 		commands.c			\
 		init.c 				\
@@ -48,6 +48,12 @@ visu:$(NAME)
 	cp $(NAME) push_swap_visualizer/$(NAME)
 	./push_swap_visualizer/build/bin/visualizer
 
+valgrind: $(NAME)
+	ARG=$$(seq -1000 1000 | shuf | head -n 100); valgrind -s ./$(NAME) $$ARG
+
+run: $(NAME)
+	ARG=$$(seq -1000 1000 | shuf | head -n 100); echo $$ARG && ./$(NAME) $$ARG
+
 test: test100
 
 test5: $(NAME)
@@ -59,4 +65,4 @@ test100: $(NAME)
 test500: $(NAME)
 	ARG=$$(seq -1000 1000 | shuf | head -n 500); echo $$ARG && ./$(NAME) $$ARG | ./$(CHECKER) $$ARG && echo -n 'count : '&& ./$(NAME) $$ARG | wc -l
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re visu valgrind test5 test100 test100

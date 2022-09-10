@@ -6,49 +6,59 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 13:22:34 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/09 03:08:43 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/10 03:03:28 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-// void	fixe_sorted_node(t_stack *a, t_stack *b, t_limite limite, t_output *output)
-// {
-// 	size_t	count;
-// 	size_t	nodes_to_push;
-
-// 	keep_half(a, b, output);
-// 	count = 0;
-// 	nodes_to_push = (limite.value - a->tail->index) - 1;
-// 	while (a->head->index > 0 && count < nodes_to_push)
-// 	{
-// 		if (a->head->index == a->tail->index + 1)
-// 			rotate(a, output);
-// 		else
-// 			push(a, b, output);
-// 		count++;
-// 	}
-// 	keep_half(a, b, output);
-// }
-
 void	fixe_sorted_node(t_tools *tools)
 {
-	while (tools->a->head->index < tools->limite_value_b && tools->a->head->index != 0)
+	size_t	nodes_to_push;
+	size_t	count;
+
+	nodes_to_push = calculate_nodes_to_push(tools);
+	count = 0;
+
+	if (nodes_to_push < 16)
 	{
-		if (tools->a->head->next->index == tools->next_to_fix)
-			swap(tools->a, tools->output);
-		if (tools->a->head->index == tools->next_to_fix)
+		while (tools->a->head->index != 0 && count < nodes_to_push)
 		{
-			rotate(tools->a, tools->output);
-			tools->next_to_fix++;
+			if (tools->a->head->next->index == tools->next_to_fix
+				&& tools->a->head->index == tools->next_to_fix + 1)
+				swap(tools->a, tools->output);
+			if (tools->a->head->index == tools->next_to_fix)
+			{
+				rotate(tools->a, tools->output);
+				tools->next_to_fix++;
+				count++;
+			}
+			else
+			{
+				push(tools->a, tools->b, tools->output);
+				count++;
+			}
 		}
-		else
-			push(tools->a, tools->b, tools->output);
 	}
-	tools->limite_value_b = tools->total_nodes - ((tools->total_nodes - tools->next_to_fix) / 2);
-	if (tools->limite_value_b >= tools->next_to_fix)
-		tools->limite_value_b = tools->total_nodes;
-	if (tools->b->total_nodes != 0)
+	else
+	{
+		find_index_limit(tools->a, tools, nodes_to_push);
+		//printf("limite : %ld\n", tools->limite);
+		while (count < nodes_to_push)
+		{
+			//printf("a head : %ld\n", tools->a->head->index);
+			if (tools->a->head->index != 0 && tools->a->head->index < tools->limite)
+				push(tools->a, tools->b, tools->output);
+			else
+				do_rotation(tools->a, tools);
+			count++;
+		}
+		while (tools->a->tail->index != tools->next_to_fix - 1)
+			reverse_rotate(tools->a, tools->output);
+	}
+
+
+	if (tools->next_to_fix != tools->total_nodes)
 		keep_half(tools);
 }
 
@@ -90,17 +100,13 @@ t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, t_tools *tools)
 	if (src->head == NULL)
 		return (FALSE);
 	nbr_of_moves = found_closest_nodes(src, tools->next_to_fix);
-	if (nbr_of_moves != -INT_MAX && nbr_of_moves != INT_MAX)
+	if (nbr_of_moves >= -5 && nbr_of_moves <= 5)
 	{
 		if (nbr_of_moves >= 0)
-			while (nbr_of_moves--
-				&& ((tools->limite_direction == UP && src->head->index <= tools->limite_value_a)
-				|| (tools->limite_direction == DOWN && src->head->index >= tools->limite_value_a)))
+			while (nbr_of_moves-- && !is_node_to_push(tools, src->head->index))
 				rotate(src, tools->output);
 		else
-			while (nbr_of_moves++
-				&& ((tools->limite_direction == UP && src->head->index <= tools->limite_value_a)
-				|| (tools->limite_direction == DOWN && src->head->index >= tools->limite_value_a)))
+			while (nbr_of_moves++ && !is_node_to_push(tools, src->head->index))
 				reverse_rotate(src, tools->output);
 		if (src->head->index == tools->next_to_fix)
 		{

@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 14:43:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/09 01:05:24 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/09 23:42:41 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,19 @@ void	reverse_rotate(t_stack *stack, t_output *output)
 		print_to_buff("rrb\n", output);
 }
 
-void	sort_five_and_push(t_stack *src, t_stack *dst, t_output *output)
+void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools)
 {
-	up_to_five_nodes(src, dst, output);
+	up_to_five_nodes(src, dst, tools->output);
 	while (src->total_nodes > 0)
 	{
-		push(src, dst, output);
-		rotate(dst, output);
+		push(src, dst, tools->output);
+		if (dst->head->index == tools->next_to_fix)
+		{
+			rotate(dst, tools->output);
+			tools->next_to_fix++;
+		}
 	}
+	fixe_sorted_node(tools);
 }
 
 void	do_rotation(t_stack *stack, t_tools *tools)
@@ -101,9 +106,7 @@ void	do_rotation(t_stack *stack, t_tools *tools)
 
 	trv = stack->head;
 	count1 = 0;
-	while (trv != NULL
-		&& ((tools->limite_direction == UP && trv->index <= tools->limite_value_a)
-		|| (tools->limite_direction == DOWN && trv->index >= tools->limite_value_a)))
+	while (trv != NULL && !is_node_to_push(tools, trv->index))
 	{
 		trv = trv->next;
 		count1++;
@@ -113,8 +116,7 @@ void	do_rotation(t_stack *stack, t_tools *tools)
 	while (trv != NULL)
 	{
 		count2++;
-		if ((tools->limite_direction == UP && trv->index > tools->limite_value_a)
-			|| (tools->limite_direction == DOWN && trv->index < tools->limite_value_a))
+		if (is_node_to_push(tools, trv->index))
 			count2 = 1;
 		trv = trv->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 15:20:46 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/09 02:01:54 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/10 03:08:48 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,28 @@ typedef struct s_tools
 	t_stack		*b;
 	size_t		total_nodes;
 	size_t		next_to_fix;
-	size_t		*limites_array;
-	size_t		limite_value_a;
-	size_t		limite_value_b;
+	char		*nodes_array;
+	size_t		array_size;
+	size_t		limite;
 	t_direction	limite_direction;
 }		t_tools;
 
-
 /*			push_swap.c				*/
-void	print_lists(t_stack *a, t_stack *b);
 
 /*			init.c					*/
 t_bool	stack_init(t_tools *tools, char **args);
 t_bool	output_init(t_tools *tools);
 
 /*			limite.c				*/
-t_bool	set_limites_array(t_tools *tools);
+t_bool	set_nodes_array(t_tools *tools);
+void	find_index_limit(t_stack *stack, t_tools *tools, size_t nb_nodes);
+size_t	calculate_nodes_to_push(t_tools *tools);
+t_bool	has_nodes_under_limite(t_stack *stack, t_tools *tools);
+t_bool	has_nodes_over_limite(t_stack *stack, t_tools *tools);
+t_bool	is_node_to_push(t_tools *tools, size_t index);
+
+/*			sort_tab.c				*/
+void	ft_sort_int_tab(size_t *tab, size_t size);
 
 /*			atoi_error_check.c		*/
 int		ft_atoi_with_error_check(const char *nptr, t_bool *error_flag);
@@ -99,13 +105,12 @@ void	swap(t_stack *stack, t_output *output);
 void	push(t_stack *stack_src, t_stack *stack_dst, t_output *output);
 void	rotate(t_stack *stack, t_output *output);
 void	reverse_rotate(t_stack *stack, t_output *output);
-void	sort_five_and_push(t_stack *src, t_stack *dst, t_output *output);
+void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools);
 void	do_rotation(t_stack *stack, t_tools *tools);
 
 /*			resolver.c				*/
 void	resolver(t_tools *tools);
 void	keep_half(t_tools *tools);
-size_t	find_index_limit(t_stack *stack, t_tools *tools);
 
 /*			up_to_five_nodes.c		*/
 void	up_to_five_nodes(t_stack *src, t_stack *dst, t_output *output);

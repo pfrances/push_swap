@@ -6,32 +6,11 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:44:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/09 02:03:20 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/10 03:07:20 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	print_lists(t_stack *a, t_stack *b)
-{
-	t_node	*trv;
-
-	ft_putstr_fd("-> a :\n", 1);
-	trv = a->head;
-	while (trv != NULL)
-	{
-		printf("nb : %d : (%ld)\n", trv->nb, trv->index);
-		trv = trv->next;
-	}
-	ft_putstr_fd("-> b : \n", 1);
-	trv = b->head;
-	while (trv != NULL)
-	{
-		printf("nb : %d : (%ld)\n", trv->nb, trv->index);
-		trv = trv->next;
-	}
-	ft_putstr_fd("\n\n", 1);
-}
 
 void	free_memory(t_tools *tools)
 {
@@ -53,15 +32,16 @@ void	free_memory(t_tools *tools)
 		free(tools->output->replace_by[i++]);
 	free(tools->output->replace_by);
 	free(tools->output);
-	free(tools->limites_array);
+	free(tools->nodes_array);
 }
 
 int	main(int __attribute__((unused))argc, char *argv[])
 {
 	t_tools	tools;
 
-	if (!stack_init(&tools, argv) || !output_init(&tools) || !set_limites_array(&tools))
-		ft_putendl_fd("Error\n", STDERR_FILENO);
+	if (!stack_init(&tools, argv) || !output_init(&tools)
+		|| !set_nodes_array(&tools))
+		ft_putendl_fd("Error", STDERR_FILENO);
 	else if (tools.a->total_nodes)
 	{
 		resolver(&tools);

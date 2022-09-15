@@ -6,30 +6,33 @@
 #    By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 22:35:44 by pfrances          #+#    #+#              #
-#    Updated: 2022/09/11 01:18:34 by pfrances         ###   ########.fr        #
+#    Updated: 2022/09/15 12:30:57 by pfrances         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
-SRCS =	atoi_error_check.c	\
-		commands.c			\
-		init.c 				\
-		input_check.c		\
-		limite.c			\
-		output1.c			\
-		output2.c			\
-		stack_a_process.c	\
-		nodes_to_push.c		\
-		push_swap.c			\
-		resolver.c			\
-		stacks.c			\
-		utils.c				\
-		up_to_five_nodes/three_nodes.c	\
-		up_to_five_nodes/four_nodes.c	\
-		up_to_five_nodes/five_nodes.c	\
-		up_to_five_nodes/up_to_five_nodes.c
+SRCS =	up_to_five_nodes/three_nodes.c		\
+		up_to_five_nodes/four_nodes.c		\
+		up_to_five_nodes/five_nodes.c		\
+		up_to_five_nodes/up_to_five_nodes.c	\
+		initialisation/atoi_error_check.c	\
+		initialisation/init.c				\
+		initialisation/input_check.c		\
+		commands.c							\
+		limite.c							\
+		output1.c							\
+		output2.c							\
+		push_swap.c							\
+		resolver.c							\
+		stack_a_process.c					\
+		stack_b_process.c					\
+		stacks.c							\
+		utils1.c							\
+		utils2.c							\
+		utils3.c
+
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 CHECKER = checker
@@ -72,4 +75,4 @@ test100: $(NAME)
 test500: $(NAME)
 	ARG=$$(seq -1000 1000 | shuf | head -n 500); echo $$ARG && ./$(NAME) $$ARG | ./$(CHECKER) $$ARG && echo -n 'count : '&& ./$(NAME) $$ARG | wc -l
 
-.PHONY: all clean fclean re visu valgrind test5 test100 test100
+.PHONY: all clean fclean re visu valgrind run test5 test100 test100

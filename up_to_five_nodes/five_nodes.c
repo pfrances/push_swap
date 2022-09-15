@@ -6,20 +6,22 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 15:47:23 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/10 22:13:45 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/11 15:05:47 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	push_first(t_stack *src, t_stack *dst, size_t first, t_output *output)
+static void	push_first(t_stack *src, t_stack *dst,
+	size_t first, t_output *output)
 {
 	push_nodes(src, dst, first, output);
 	four_nodes_resolver(src, dst, output);
 	push(dst, src, output);
 }
 
-void	push_second(t_stack *src, t_stack *dst, size_t second, t_output *output)
+static void	push_second(t_stack *src, t_stack *dst,
+	size_t second, t_output *output)
 {
 	push_nodes(src, dst, second, output);
 	four_nodes_resolver(src, dst, output);
@@ -27,7 +29,8 @@ void	push_second(t_stack *src, t_stack *dst, size_t second, t_output *output)
 	push(dst, src, output);
 }
 
-void	push_last(t_stack *src, t_stack *dst, size_t last, t_output *output)
+static void	push_last(t_stack *src, t_stack *dst,
+	size_t last, t_output *output)
 {
 	push_nodes(src, dst, last, output);
 	four_nodes_resolver(src, dst, output);

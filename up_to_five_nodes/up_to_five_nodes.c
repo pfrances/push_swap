@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 22:22:12 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/11 00:57:48 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/14 01:46:21 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	up_to_five_nodes(t_stack *src, t_stack *dst, t_output *output)
 
 void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools)
 {
-	up_to_five_nodes(src, dst, tools->output);
+	if (tools->next_to_fix != 0)
+		up_to_five_nodes(src, dst, tools->output);
 	while (src->total_nodes > 0)
 	{
 		push(src, dst, tools->output);
@@ -39,5 +40,4 @@ void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools)
 			tools->next_to_fix++;
 		}
 	}
-	a_stack_process(tools);
 }

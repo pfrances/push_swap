@@ -6,18 +6,18 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 14:43:14 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/10 22:40:00 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/15 11:25:29 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	push(t_stack *stack_src, t_stack *stack_dst, t_output *output)
+size_t	push(t_stack *stack_src, t_stack *stack_dst, t_output *output)
 {
 	t_node	*tmp;
 
 	if (stack_src->head == NULL)
-		return ;
+		return (0);
 	tmp = stack_dst->head;
 	stack_dst->head = stack_src->head;
 	stack_src->head = stack_src->head->next;
@@ -30,14 +30,15 @@ void	push(t_stack *stack_src, t_stack *stack_dst, t_output *output)
 		print_to_buff("pa\n", output);
 	else if (stack_dst->name == STACK_B)
 		print_to_buff("pb\n", output);
+	return (1);
 }
 
-void	swap(t_stack *stack, t_output *output)
+size_t	swap(t_stack *stack, t_output *output)
 {
 	t_node	*tmp;
 
 	if (stack->head == NULL || stack->head == stack->tail)
-		return ;
+		return (0);
 	tmp = stack->head;
 	stack->head = stack->head->next;
 	tmp->next = stack->head->next;
@@ -47,14 +48,15 @@ void	swap(t_stack *stack, t_output *output)
 		print_to_buff("sa\n", output);
 	else if (stack->name == STACK_B)
 		print_to_buff("sb\n", output);
+	return (1);
 }
 
-void	rotate(t_stack *stack, t_output *output)
+size_t	rotate(t_stack *stack, t_output *output)
 {
 	t_node	*tmp;
 
 	if (stack->head == NULL || stack->head == stack->tail)
-		return ;
+		return (0);
 	tmp = stack->head->next;
 	stack->tail->next = stack->head;
 	stack->head->next = NULL;
@@ -64,14 +66,15 @@ void	rotate(t_stack *stack, t_output *output)
 		print_to_buff("ra\n", output);
 	else if (stack->name == STACK_B)
 		print_to_buff("rb\n", output);
+	return (1);
 }
 
-void	reverse_rotate(t_stack *stack, t_output *output)
+size_t	reverse_rotate(t_stack *stack, t_output *output)
 {
 	t_node	*tmp;
 
 	if (stack->head == NULL || stack->head == stack->tail)
-		return ;
+		return (0);
 	tmp = stack->head;
 	stack->tail->next = stack->head;
 	stack->head = stack->tail;
@@ -81,32 +84,5 @@ void	reverse_rotate(t_stack *stack, t_output *output)
 		print_to_buff("rra\n", output);
 	else if (stack->name == STACK_B)
 		print_to_buff("rrb\n", output);
-}
-
-void	do_rotation(t_stack *stack, t_tools *tools)
-{
-	t_node	*trv;
-	size_t	count1;
-	size_t	count2;
-
-	trv = stack->head;
-	count1 = 0;
-	while (trv != NULL && !is_node_to_push(tools, trv->index))
-	{
-		trv = trv->next;
-		count1++;
-	}
-	trv = stack->head;
-	count2 = 1;
-	while (trv != NULL)
-	{
-		count2++;
-		if (is_node_to_push(tools, trv->index))
-			count2 = 1;
-		trv = trv->next;
-	}
-	if (count1 < count2)
-		rotate(stack, tools->output);
-	else
-		reverse_rotate(stack, tools->output);
+	return (1);
 }

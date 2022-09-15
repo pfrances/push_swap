@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 15:20:46 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/11 00:57:48 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/15 13:16:35 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,18 @@
 # define STACK_A 0
 # define STACK_B 1
 # define BUFFER_SIZE 1024
-# define TO_DELETE "pa\npb\n pb\npa\n \nra\nrra rra\nra\n \nrb\nrrb rrb\nrb\n sa\nsa\n sb\nsb\n"
-# define TO_REPLACE "\nra\nrb \nrb\nra rra\nrrb rrb\nrra sa\nsb sb\nsa"
-# define REPLACE_BY "\nrrXXX \nrrXXX rrrXXXX rrrXXXX ssXXX ssXXX"
+# define DEL "pa\npb\n pb\npa\n \nra\nrra rra\nra\n \nrb\nrrb rrb\nrb\n sa\nsa\n sb\nsb\n"
+# define FROM "\nra\nrb \nrb\nra rra\nrrb rrb\nrra sa\nsb sb\nsa \nra\npb\nrra \nrb\npa\nrrb"
+# define TO "\nrrXXX \nrrXXX rrrXXXX rrrXXXX ssXXX ssXXX \nsa\npbXXXX \nsb\npaXXXX"
 # include "libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdio.h>
 
 typedef enum e_bool
 {
 	FALSE,
 	TRUE
 }		t_bool;
-
-typedef enum e_direction
-{
-	UP,
-	DOWN
-}		t_direction;
 
 typedef struct s_node
 {
@@ -68,23 +61,14 @@ typedef struct s_tools
 	size_t		total_nodes;
 	size_t		next_to_fix;
 	char		*nodes_array;
-	size_t		limite;
-	t_direction	limite_direction;
+	size_t		limite_low;
+	size_t		limite_high;
 }		t_tools;
 
 /*			init.c					*/
 t_bool	initialisation(char **args, t_tools *tools);
-
 /*			input_check.c			*/
 t_bool	input_check(t_stack *a, char **args);
-
-/*			limite.c				*/
-void	find_index_limit(t_stack *stack, t_tools *tools, size_t nb_nodes);
-size_t	calculate_nodes_to_push(t_tools *tools);
-t_bool	has_nodes_under_limite(t_stack *stack, t_tools *tools);
-t_bool	has_nodes_over_limite(t_stack *stack, t_tools *tools);
-t_bool	is_node_to_push(t_tools *tools, size_t index);
-
 /*			atoi_error_check.c		*/
 int		ft_atoi_with_error_check(const char *nptr, t_bool *error_flag);
 
@@ -96,39 +80,43 @@ void	stack_clear(t_tools *tools);
 void	update_tail(t_stack *stack);
 
 /*			commands.c				*/
-void	swap(t_stack *stack, t_output *output);
-void	push(t_stack *stack_src, t_stack *stack_dst, t_output *output);
-void	rotate(t_stack *stack, t_output *output);
-void	reverse_rotate(t_stack *stack, t_output *output);
-void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools);
-void	do_rotation(t_stack *stack, t_tools *tools);
+size_t	swap(t_stack *stack, t_output *output);
+size_t	push(t_stack *stack_src, t_stack *stack_dst, t_output *output);
+size_t	rotate(t_stack *stack, t_output *output);
+size_t	reverse_rotate(t_stack *stack, t_output *output);
 
 /*			up_to_fives_nodes		*/
 void	three_nodes_resolver(t_stack *stack, t_output *output);
 void	four_nodes_resolver(t_stack *src, t_stack *dst, t_output *output);
 void	five_nodes_resolver(t_stack *src, t_stack *dst, t_output *output);
+void	up_to_five_nodes(t_stack *src, t_stack *dst, t_output *output);
+void	sort_five_and_push(t_stack *src, t_stack *dst, t_tools *tools);
 
 /*			resolver.c				*/
 void	resolver(t_tools *tools);
-void	keep_half(t_tools *tools);
+/*			stack_a_process.c		*/
+void	stack_a_process(t_tools *tools);
+/*			stack_b_process.c		*/
+void	stack_b_process(t_tools *tools);
 
-/*			up_to_five_nodes.c		*/
-void	up_to_five_nodes(t_stack *src, t_stack *dst, t_output *output);
+/*			limite.c				*/
+void	set_index_limit(t_stack *stack, t_tools *tools, size_t nb_nodes);
+t_bool	has_nodes_under_limite(t_stack *stack, t_tools *tools);
+t_bool	has_nodes_over_limite(t_stack *stack, t_tools *tools);
 
-/*			nodes_fixing.c			*/
-void	a_stack_process(t_tools *tools);
-t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, t_tools *tools);
-int	found_closest_nodes(t_stack *src, size_t next_to_fix);
-t_bool	fixe_firsts_nodes(t_tools *tools);
-
-/*			output.c	1 & 2		*/
+/*			output1.c				*/
 void	print_to_buff(char *command, t_output *output);
 void	print_remaining(t_output *output);
+/*			output2.c				*/
 void	output_optimisation(t_output *output);
 
-/*			utils.c					*/
-void	push_nodes(t_stack *src, t_stack *dst, size_t index, t_output *output);
+/*			utils1.c					*/
 size_t	find_index(t_stack *stack, size_t to_find);
-size_t	ft_abs(int	nb);
+size_t	ft_abs(int nb);
+/*			utils2.c				*/
+t_bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, t_tools *tools);
+void	push_nodes(t_stack *src, t_stack *dst, size_t index, t_output *output);
+/*			utils3.c				*/
+size_t	calculate_nodes_to_push(t_tools *tools);
 
 #endif

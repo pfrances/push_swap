@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 15:20:46 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/19 18:27:48 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/09/19 21:04:25 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ typedef struct s_tools
 
 /*			init.c					*/
 bool	initialisation(char **args, t_tools *tools);
-/*			do_parsing.c			*/
-bool	do_parsing(t_stack *a, char **args);
+/*			input_check.c			*/
+bool	input_check(t_stack *a, char **args);
 /*			atoi_error_check.c		*/
 int		ft_atoi_with_error_check(const char *nptr, bool *error_flag);
 

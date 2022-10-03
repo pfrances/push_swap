@@ -1,0 +1,10 @@
+checker*
+push_swap
+push_swap_tester/
+push_swap_visualizer/
+old_push_swap/
+test*
+txt*
+*.ini
+*.o
+*.a

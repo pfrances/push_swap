@@ -6,13 +6,13 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/16 16:20:59 by pfrances          #+#    #+#             */
-/*   Updated: 2022/04/26 20:37:16 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/10/03 17:53:39 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_is_space(char c)
+size_t	ft_isspace(char c)
 {
 	return ((c >= '\t' && c <= '\r') || c == ' ');
 }
@@ -30,12 +30,12 @@ static char	*check_sign(char *str_nbr, int *sign)
 		return (str_nbr);
 }
 
-static int	check_long_over_flow(long nbr, long unit, int sign)
+static long	check_long_over_flow(long nbr, long unit, int sign)
 {
 	if (sign == 1 && nbr > (LONG_MAX - unit) / 10)
-		return ((int)LONG_MAX);
+		return (LONG_MAX);
 	else if (sign == -1 && -(nbr) < (LONG_MIN + unit) / 10)
-		return ((int)LONG_MIN);
+		return (LONG_MIN);
 	else
 		return (1);
 }
@@ -48,7 +48,7 @@ int	ft_atoi(const char *nptr)
 	char	*str_nbr;
 
 	str_nbr = (char *)nptr;
-	while (ft_is_space(*str_nbr))
+	while (ft_isspace(*str_nbr))
 		str_nbr++;
 	sign = 1;
 	str_nbr = check_sign(str_nbr, &sign);
@@ -57,7 +57,7 @@ int	ft_atoi(const char *nptr)
 	{
 		over_flow_flag = check_long_over_flow(result, *str_nbr - '0', sign);
 		if (over_flow_flag != 1)
-			return (over_flow_flag);
+			return ((int)(over_flow_flag));
 		result = result * 10 + (*str_nbr - '0');
 		str_nbr++;
 	}

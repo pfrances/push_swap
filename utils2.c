@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 01:16:25 by pfrances          #+#    #+#             */
-/*   Updated: 2022/09/15 18:02:04 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/10/02 20:50:43 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	find_nodes_easy_to_fixe(t_stack *src, t_stack *dst, t_tools *tools)
 	if (src->head == NULL)
 		return (false);
 	nbr_of_moves = found_closest_nodes(src, tools->next_to_fix);
-	if (ft_abs(nbr_of_moves) <= 5)
+	if (ft_abs(nbr_of_moves) <= 3)
 	{
 		if (nbr_of_moves >= 0)
 			while (nbr_of_moves--

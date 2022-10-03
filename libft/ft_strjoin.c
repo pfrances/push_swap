@@ -6,7 +6,7 @@
 /*   By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/16 18:04:03 by pfrances          #+#    #+#             */
-/*   Updated: 2022/04/29 00:58:52 by pfrances         ###   ########.fr       */
+/*   Updated: 2022/06/05 10:49:57 by pfrances         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	total_length = s1_len + ft_strlen(s2);
 	result = malloc(sizeof(char) * (total_length + 1));
 	if (result == NULL)
-		return (NULL);
+		return (NULL);/// //str1 : abc || str2 : DEF --> abc 000 0
 	ft_strlcpy(result, s1, s1_len + 1);
 	ft_strlcat(result + s1_len, s2, total_length + 1);
 	return (result);

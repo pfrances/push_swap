@@ -6,7 +6,7 @@
 #    By: pfrances <pfrances@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 22:35:44 by pfrances          #+#    #+#              #
-#    Updated: 2022/09/19 18:08:57 by pfrances         ###   ########.fr        #
+#    Updated: 2022/10/03 18:05:25 by pfrances         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
+	rm -f $(LIBFT)
 
 re: fclean all
 
@@ -76,4 +76,4 @@ test100: $(NAME)
 test500: $(NAME)
 	ARG=$$(seq -1000 1000 | shuf | head -n 500); echo $$ARG && ./$(NAME) $$ARG | ./$(CHECKER) $$ARG && echo -n 'count : '&& ./$(NAME) $$ARG | wc -l
 
-.PHONY: all clean fclean re visu valgrind run test5 test100 test100
+.PHONY: all clean fclean re visu valgrind run test test5 test100 test100
